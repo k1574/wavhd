@@ -1,10 +1,20 @@
 #ifndef __WAVHD_H
 #define __WAVHD_H
 
+typedef char byte;
+
+typedef struct {
+	byte b[4];
+} b4 ;
+
+typedef struct {
+	byte b[2];
+} b2 ;
+
 typedef struct {
 	/* RIFF header "RIFF. */
 	char chunkId[4];
-	unsigned long chunkSize;
+	b4 chunkSize;
 
 	/* "WAVE" characters. */
 	char format[4];
@@ -13,22 +23,22 @@ typedef struct {
 	char subchunk1Id[4];
 
 	/* 16 for PCM. */
-	unsigned long subchunk1Size;
+	b4 subchunk1Size;
 
 	/* For PCM = 1(Linear quantization). */
-	unsigned short audioFormat;
+	b2 audioFormat;
 	
-	unsigned short numChannels;
-	unsigned long sampleRate;
-	unsigned long byteRate;
-	unsigned short blockAlign;
-	unsigned short bitsPerSample;
+	b2 numChannels;
+	b4 sampleRate;
+	b4 byteRate;
+	b2 blockAlign;
+	b2 bitsPerSample;
 	
 	/* "data". */
 	char subchunk2Id[4];
 	
 	/* Num of byte in data field. */
-	unsigned long subchunk2Size;
+	b4 subchunk2Size;
 
 	/* WAV data. */
 } WaveHeader ;

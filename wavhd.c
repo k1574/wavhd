@@ -5,12 +5,24 @@
 #include "wavhd.h"
 
 char *argv0;
+typedef unsigned int ui;
 
 void
 usage(void)
 {
-	fprintf(stderr, "Usage: %s [-a audio_format] [-n num_of_chan] [-s sample_rate] [-d deepness_bits] [-S size_in_bytes]\n", argv0);
+	fprintf(stderr, "Usage: %s [-a audio_format] [-n num_of_chan]"
+		"[-s sample_rate] [-d deepness_bits] [-S size_in_bytes]\n", argv0);
 	exit(1);
+}
+
+ui
+islittleendian(void)
+{
+	unsigned short buf = 1;
+	if( *((char*)&buf)==1 )
+		return 1 ;
+	else
+		return 0 ;
 }
 
 int
@@ -18,35 +30,34 @@ main(int argc, char *argv[])
 {
 	char *opt_a, *opt_n, *opt_s, *opt_d, *opt_S;
 	argv0 = argv[0] ;
-	WaveHeader wh;
+	WaveHeader wh = {
+		.chunkId = {'R','I','F','F',}, .format = { 'W','A','V','E'},
+		.subchunk1Id = {'f','m','t',' '}, .subchunk2Id = {'d','a','t','a'},
+	} ;
 	/* Setting up the standard values,
 		those are the most popular. */
-	memcpy(wh.chunkId, "RIFF", sizeof wh.chunkId);
-	memcpy(wh.format, "WAVE", sizeof wh.format);
-	memcpy(wh.subchunk1Id, "fmt ", sizeof wh.subchunk1Id);
-	memcpy(wh.subchunk2Id, "data", sizeof wh.subchunk2Id);
-	wh.subchunk1Size = 16 ;
-	wh.audioFormat = 1 ;
-	wh.numChannels = 1 ;
-	wh.sampleRate = 48000 ;
-	wh.bitsPerSample = 32 ;
+	(ui)wh.subchunk1Size = 16 ;
+	(ui)wh.audioFormat = 1 ;
+	(ui)wh.numChannels = 1 ;
+	(ui)wh.sampleRate = 48000 ;
+	(ui)wh.bitsPerSample = 32 ;
 	/* It means read until reaching EOF. */
-	wh.subchunk2Size = 0 ;
+	(ui)wh.subchunk2Size = 0 ;
 	ARGBEGIN {
 	case 'f' :
-		wh.audioFormat = atoi( EARGF(usage()) ) ;
+		(ui)wh.audioFormat = atoi( EARGF(usage()) ) ;
 	break;
 	case 'n' :
-		wh.numChannels = atoi( EARGF(usage()) ) ;
+		(ui)wh.numChannels = atoi( EARGF(usage()) ) ;
 	break;
 	case 's' :
-		wh.sampleRate = atoi( EARGF(usage()) ) ;
+		(ui)wh.sampleRate = atoi( EARGF(usage()) ) ;
 	break;
 	case 'd' :
-		wh.bitsPerSample = atoi( EARGF(usage()) ) ;
+		(ui)wh.bitsPerSample = atoi( EARGF(usage()) ) ;
 	break;
 	case 'S' :
-		wh.subchunk2Size= atoi( EARGF(usage()) ) ;
+		(ui)wh.subchunk2Size = atoi( EARGF(usage()) ) ;
 	break;
 	default:
 		usage();
@@ -55,9 +66,9 @@ main(int argc, char *argv[])
 	if(argc)
 		usage();
 
-	wh.byteRate = wh.sampleRate * wh.numChannels * wh.bitsPerSample/8 ;
-	wh.blockAlign = wh.numChannels * wh.bitsPerSample/8 ;
-	wh.chunkSize = 4 + (8+wh.subchunk1Size)+(8+wh.subchunk2Size) ;
+	(ui)wh.byteRate = (ui)wh.sampleRate * (ui)wh.numChannels * (ui)wh.bitsPerSample/8 ;
+	(ui)wh.blockAlign = (ui)wh.numChannels * (ui)wh.bitsPerSample/8 ;
+	(ui)wh.chunkSize = 4 + (8+(ui)wh.subchunk1Size)+(8+(ui)wh.subchunk2Size) ;
 
 	fwrite(&wh, sizeof wh, 1, stdout);
 
