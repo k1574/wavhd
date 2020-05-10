@@ -1,2 +1,6 @@
 CC = tcc
 LD = $CC
+
+USR = $HOME
+ROOT = $USR/local
+BIN = $ROOT/bin
