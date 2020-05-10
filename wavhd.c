@@ -36,28 +36,28 @@ main(int argc, char *argv[])
 	} ;
 	/* Setting up the standard values,
 		those are the most popular. */
-	(ui)wh.subchunk1Size = 16 ;
-	(ui)wh.audioFormat = 1 ;
-	(ui)wh.numChannels = 1 ;
-	(ui)wh.sampleRate = 48000 ;
-	(ui)wh.bitsPerSample = 32 ;
+	wh.subchunk1Size = 16 ;
+	wh.audioFormat = 1 ;
+	wh.numChannels = 1 ;
+	wh.sampleRate = 48000 ;
+	wh.bitsPerSample = 32 ;
 	/* It means read until reaching EOF. */
-	(ui)wh.subchunk2Size = 0 ;
+	wh.subchunk2Size = 0 ;
 	ARGBEGIN {
 	case 'f' :
-		(ui)wh.audioFormat = atoi( EARGF(usage()) ) ;
+		wh.audioFormat = atoi( EARGF(usage()) ) ;
 	break;
 	case 'n' :
-		(ui)wh.numChannels = atoi( EARGF(usage()) ) ;
+		wh.numChannels = atoi( EARGF(usage()) ) ;
 	break;
 	case 's' :
-		(ui)wh.sampleRate = atoi( EARGF(usage()) ) ;
+		wh.sampleRate = atoi( EARGF(usage()) ) ;
 	break;
 	case 'd' :
-		(ui)wh.bitsPerSample = atoi( EARGF(usage()) ) ;
+		wh.bitsPerSample = atoi( EARGF(usage()) ) ;
 	break;
 	case 'S' :
-		(ui)wh.subchunk2Size = atoi( EARGF(usage()) ) ;
+		wh.subchunk2Size = atoi( EARGF(usage()) ) ;
 	break;
 	default:
 		usage();
@@ -66,9 +66,9 @@ main(int argc, char *argv[])
 	if(argc)
 		usage();
 
-	(ui)wh.byteRate = (ui)wh.sampleRate * (ui)wh.numChannels * (ui)wh.bitsPerSample/8 ;
-	(ui)wh.blockAlign = (ui)wh.numChannels * (ui)wh.bitsPerSample/8 ;
-	(ui)wh.chunkSize = 4 + (8+(ui)wh.subchunk1Size)+(8+(ui)wh.subchunk2Size) ;
+	wh.byteRate = wh.sampleRate * wh.numChannels * wh.bitsPerSample/8 ;
+	wh.blockAlign = wh.numChannels * wh.bitsPerSample/8 ;
+	wh.chunkSize = 4 + (8+wh.subchunk1Size)+(8+wh.subchunk2Size) ;
 
 	fwrite(&wh, sizeof wh, 1, stdout);
 

@@ -1,15 +1,10 @@
 #ifndef __WAVHD_H
 #define __WAVHD_H
 
-typedef char byte;
+#include <inttypes.h>
 
-typedef struct {
-	byte b[4];
-} b4 ;
-
-typedef struct {
-	byte b[2];
-} b2 ;
+typedef uint32_t b4;
+typedef uint16_t b2;
 
 typedef struct {
 	/* RIFF header "RIFF. */
