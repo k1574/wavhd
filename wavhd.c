@@ -37,7 +37,7 @@ main(int argc, char *argv[])
 	/* Setting up the standard values,
 		those are the most popular. */
 	wh.subchunk1Size = 16 ;
-	wh.audioFormat = 1 ;
+	wh.audioFormat = 0x0003	 ;
 	wh.numChannels = 1 ;
 	wh.sampleRate = 48000 ;
 	wh.bitsPerSample = 32 ;
